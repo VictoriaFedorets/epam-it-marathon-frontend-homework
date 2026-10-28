@@ -1,0 +1,68 @@
+<article class="card">
+  <header class="card-header">
+    <h2 class="title">
+      @if (participant().type === 'Owner') {
+        My Pre-Order
+        <span class="sr-only">{{ title() }}</span>
+      } @else {
+        {{ title() }}
+      }
+    </h2>
+    <button class="header-action" type="button" aria-disabled="true">
+      @if (participant().type === 'Owner') {
+        Edit my Pre-Order
+      } @else {
+        Remove Guest
+      }
+    </button>
+  </header>
+
+  @if (participant().items.length) {
+    <ul class="items">
+      @for (item of participant().items; track item.dish.id) {
+        <li class="item">
+          <button
+            class="remove-button"
+            type="button"
+            aria-label="Remove {{ item.dish.name }}"
+            aria-disabled="true"
+          >
+            <span class="delete-icon" aria-hidden="true"></span>
+          </button>
+          @if (item.dish.imageUrl) {
+            <img
+              class="avatar"
+              [src]="item.dish.imageUrl"
+              alt=""
+              width="40"
+              height="40"
+              loading="lazy"
+            />
+          } @else {
+            <span class="avatar initial" aria-hidden="true">{{ item.dish.name.charAt(0) }}</span>
+          }
+          <p class="name">{{ item.dish.name }}</p>
+          <div class="quantity" aria-label="Quantity {{ item.quantity }}">
+            <button type="button" aria-label="Decrease quantity" aria-disabled="true">−</button>
+            <span>{{ item.quantity }}</span>
+            <button type="button" aria-label="Increase quantity" aria-disabled="true">+</button>
+          </div>
+          <p class="price">{{ item.dish.price * item.quantity | currency }}</p>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="empty">No dishes yet</p>
+  }
+
+  @if (participant().isSubmitted) {
+    <p class="status submitted">Submitted</p>
+  } @else {
+    <p class="status pending">Still choosing</p>
+  }
+
+  <p class="subtotal">
+    <span>Subtotal</span>
+    <span>{{ participant().total | currency }}</span>
+  </p>
+</article>

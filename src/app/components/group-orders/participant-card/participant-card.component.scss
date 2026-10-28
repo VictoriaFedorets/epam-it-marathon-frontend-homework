@@ -1,0 +1,238 @@
+@use '../../../shared/styles/abstracts/colors' as color;
+
+.card {
+  padding: 18px 16px 16px;
+  border-radius: 13px;
+  background: color.$neutral-0;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.title {
+  min-width: 0;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.header-action {
+  flex: 0 0 auto;
+  padding: 2px 8px 5px;
+  border: 0;
+  border-bottom: 1px solid color.$neutral-700;
+  background: transparent;
+  color: color.$neutral-900;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.items {
+  list-style: none;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 48px 48px minmax(0, 1fr) 98px 68px;
+  align-items: center;
+  gap: 11px;
+  min-height: 64px;
+  padding: 8px 0;
+  border-bottom: 1px solid color.$neutral-100;
+}
+
+.remove-button {
+  display: grid;
+  width: 32px;
+  height: 40px;
+  justify-self: end;
+  margin-right: 7px;
+  padding: 3px;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: color.$neutral-600;
+  cursor: default;
+}
+
+.delete-icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  background: url('/assets/img/delete.png') center / contain no-repeat;
+}
+
+.avatar {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  place-items: center;
+  border-radius: 50%;
+  object-fit: cover;
+  background: color.$green-100;
+}
+
+.initial {
+  color: color.$neutral-600;
+  font-size: 15px;
+}
+
+.name {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.quantity button {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid color.$green-600;
+  border-radius: 8px;
+  background: color.$neutral-0;
+  color: color.$green-600;
+  font-size: 18px;
+  line-height: 1;
+  cursor: default;
+}
+
+.quantity button:first-child {
+  border-color: color.$neutral-200;
+  color: color.$neutral-400;
+}
+
+.price {
+  min-width: 68px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.empty {
+  padding: 12px 0 16px;
+  color: color.$neutral-600;
+  font-size: 14px;
+}
+
+.status {
+  width: fit-content;
+  margin-top: 9px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.submitted {
+  background: color.$green-100;
+  color: color.$green-800;
+}
+
+.pending {
+  background: color.$orange-100;
+  color: color.$orange-600;
+}
+
+.subtotal {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 14px;
+  padding: 2px 0 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 16px 12px 14px;
+  }
+
+  .item {
+    grid-template-columns: 20px 40px minmax(0, 1fr) 58px;
+    column-gap: 8px;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    grid-column: 2;
+    grid-row: span 2;
+  }
+
+  .remove-button {
+    width: 24px;
+    height: 30px;
+    justify-self: center;
+    margin-right: 0;
+    grid-row: span 2;
+  }
+
+  .delete-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .name {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: end;
+    font-size: 13px;
+  }
+
+  .quantity {
+    grid-column: 3;
+    grid-row: 2;
+    font-size: 12px;
+  }
+
+  .quantity button {
+    width: 28px;
+    height: 28px;
+  }
+
+  .price {
+    min-width: 58px;
+    grid-column: 4;
+    grid-row: 1 / span 2;
+    font-size: 13px;
+  }
+
+  .header-action {
+    padding-right: 2px;
+    padding-left: 2px;
+    font-size: 12px;
+  }
+}
