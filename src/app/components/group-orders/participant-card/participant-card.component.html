@@ -1,20 +1,22 @@
 <article class="card">
   <header class="card-header">
     <h2 class="title">
-      @if (participant().type === 'Owner') {
+      @if (isOwner()) {
         My Pre-Order
         <span class="sr-only">{{ title() }}</span>
       } @else {
         {{ title() }}
       }
     </h2>
-    <button class="header-action" type="button" aria-disabled="true">
-      @if (participant().type === 'Owner') {
-        Edit my Pre-Order
-      } @else {
-        Remove Guest
-      }
-    </button>
+    @if (isOwner() || participant().type === 'Guest') {
+      <button class="header-action" type="button" [disabled]="isReadOnly()" aria-disabled="true">
+        @if (isOwner()) {
+          Edit my Pre-Order
+        } @else {
+          Remove Guest
+        }
+      </button>
+    }
   </header>
 
   @if (participant().items.length) {
@@ -25,6 +27,7 @@
             class="remove-button"
             type="button"
             aria-label="Remove {{ item.dish.name }}"
+            [disabled]="isReadOnly()"
             aria-disabled="true"
           >
             <span class="delete-icon" aria-hidden="true"></span>
@@ -42,10 +45,28 @@
             <span class="avatar initial" aria-hidden="true">{{ item.dish.name.charAt(0) }}</span>
           }
           <p class="name">{{ item.dish.name }}</p>
-          <div class="quantity" aria-label="Quantity {{ item.quantity }}">
-            <button type="button" aria-label="Decrease quantity" aria-disabled="true">−</button>
+          <div
+            class="quantity"
+            [class.quantity--multiple]="item.quantity > 1"
+            aria-label="Quantity {{ item.quantity }}"
+          >
+            <button
+              type="button"
+              aria-label="Decrease quantity"
+              [disabled]="isReadOnly()"
+              aria-disabled="true"
+            >
+              −
+            </button>
             <span>{{ item.quantity }}</span>
-            <button type="button" aria-label="Increase quantity" aria-disabled="true">+</button>
+            <button
+              type="button"
+              aria-label="Increase quantity"
+              [disabled]="isReadOnly()"
+              aria-disabled="true"
+            >
+              +
+            </button>
           </div>
           <p class="price">{{ item.dish.price * item.quantity | currency }}</p>
         </li>
@@ -55,10 +76,12 @@
     <p class="empty">No dishes yet</p>
   }
 
-  @if (participant().isSubmitted) {
-    <p class="status submitted">Submitted</p>
-  } @else {
-    <p class="status pending">Still choosing</p>
+  @if (showStatus()) {
+    @if (participant().isSubmitted) {
+      <p class="status submitted">Submitted</p>
+    } @else {
+      <p class="status pending">Still choosing</p>
+    }
   }
 
   <p class="subtotal">

@@ -11,6 +11,9 @@ import { Participant } from '@app/models/group-orders/participant.model';
 })
 export class ParticipantCardComponent {
   readonly participant = input.required<Participant>();
+  readonly isOwner = input(false);
+  readonly isReadOnly = input(false);
+  readonly showStatus = input(true);
 
   readonly title = computed(() => {
     const person = this.participant();

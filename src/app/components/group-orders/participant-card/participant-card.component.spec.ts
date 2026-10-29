@@ -40,6 +40,16 @@ describe('Практичне · картка учасника', () => {
       expect(text).toContain('$440.00');
     });
 
+    it('підсвічує кнопку зменшення кількості, якщо кількість більша за 1', () => {
+      expect(render(OLENA).querySelector('.quantity--multiple')).not.toBeNull();
+      expect(
+        render({
+          ...OLENA,
+          items: [{ ...OLENA.items[0], quantity: 1 }],
+        }).querySelector('.quantity--multiple'),
+      ).toBeNull();
+    });
+
     it('показує Subtotal учасника', () => {
       expect(render(OLENA).textContent).toContain('Subtotal');
     });

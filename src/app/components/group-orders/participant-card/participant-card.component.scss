@@ -41,9 +41,14 @@
   background: transparent;
   color: color.$neutral-900;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
   cursor: default;
+}
+
+.header-action:disabled {
+  color: color.$neutral-400;
+  border-bottom-color: color.$neutral-200;
 }
 
 .items {
@@ -72,6 +77,10 @@
   background: transparent;
   color: color.$neutral-600;
   cursor: default;
+}
+
+.remove-button:disabled {
+  color: color.$neutral-400;
 }
 
 .delete-icon {
@@ -130,6 +139,11 @@
 .quantity button:first-child {
   border-color: color.$neutral-200;
   color: color.$neutral-400;
+}
+
+.quantity--multiple button:first-child {
+  border-color: color.$green-600;
+  color: color.$green-600;
 }
 
 .price {

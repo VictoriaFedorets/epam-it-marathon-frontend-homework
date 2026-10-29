@@ -4,67 +4,150 @@
       <div class="title-row">
         <div class="title-group">
           <h1 id="page-title">Group Pre-Order</h1>
-          <span class="order-label">Created New Pre-Order</span>
+          @if (statusLabel()) {
+            <span class="order-label" [class.order-label--submitted]="isSubmitted()">
+              {{ statusLabel() }}
+            </span>
+          }
         </div>
         <button class="close-button" type="button" aria-label="Close" aria-disabled="true">
           ×
         </button>
       </div>
 
-      <ul class="order-details" aria-label="Reservation details">
-        <li>
-          <span class="detail-icon location-icon" aria-hidden="true"></span>
-          <span>{{ invite.LocationAddress }}</span>
-        </li>
-        <li>
-          <span class="detail-icon calendar-icon" aria-hidden="true"></span>
-          <span>{{ invite.StartTime | date: 'MMM d, y' }}</span>
-        </li>
-        <li>
-          <span class="detail-icon clock-icon" aria-hidden="true"></span>
-          <span
-            >{{ invite.StartTime | date: 'shortTime' }} -
-            {{ invite.EndTime | date: 'shortTime' }}</span
-          >
-        </li>
-        <li>
-          <span class="detail-icon guests-icon" aria-hidden="true"></span>
-          <span>{{ participants().length }} of {{ invite.MaxGuestCount }} guests</span>
-        </li>
-      </ul>
+      @if (invite(); as reservationInvite) {
+        <ul class="order-details" aria-label="Reservation details">
+          <li>
+            <span class="detail-icon location-icon" aria-hidden="true"></span>
+            <span>{{ reservationInvite.LocationAddress }}</span>
+          </li>
+          <li>
+            <span class="detail-icon calendar-icon" aria-hidden="true"></span>
+            <span>{{ reservationInvite.StartTime | date: 'MMM d, y' }}</span>
+          </li>
+          <li>
+            <span class="detail-icon clock-icon" aria-hidden="true"></span>
+            <span>
+              {{ reservationInvite.StartTime | date: 'shortTime' }} -
+              {{ reservationInvite.EndTime | date: 'shortTime' }}
+            </span>
+          </li>
+          <li>
+            <span class="detail-icon guests-icon" aria-hidden="true"></span>
+            <span>{{ participants().length }} of {{ reservationInvite.MaxGuestCount }} guests</span>
+          </li>
+        </ul>
+      }
     </header>
 
-    @if (submittedGuest(); as guest) {
-      <aside class="notice">
-        <svg class="notice-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12a2 2 0 0 0 4 0"
-            fill="none"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.7"
-          />
-        </svg>
-        <p>
-          <strong>{{ guest.name }}</strong> has filled their pre-order and is waiting for you to
-          submit
-        </p>
-      </aside>
-    }
-
-    <ul class="participants">
-      @for (person of participants(); track person.id) {
-        <li><app-participant-card [participant]="person" /></li>
+    @if (loading()) {
+      <p class="page-state" role="status">Loading group pre-order…</p>
+    } @else if (loadError(); as errorMessage) {
+      <section class="error-state" role="alert">
+        <p>{{ errorMessage }}</p>
+        <button class="button button--secondary button--large" type="button" (click)="loadData()">
+          Try again
+        </button>
+      </section>
+    } @else {
+      @if (hasPendingParticipants() && !isSubmitted()) {
+        <aside class="notice notice--warning">
+          <span class="notice-icon" aria-hidden="true">!</span>
+          <p>
+            {{ pendingCount() }} participant{{ pendingCount() === 1 ? '' : 's' }}
+            {{ pendingCount() === 1 ? "hasn't" : "haven't" }} submitted their cart yet — their
+            dishes won't be included in the order
+          </p>
+        </aside>
       }
-    </ul>
 
-    <footer class="order-footer">
-      <p class="grand-total">
-        <span>Grand Total</span>
-        <span>{{ total | currency }}</span>
-      </p>
-      <button class="submit-button" type="button" aria-disabled="true">Submit Pre-Order</button>
-    </footer>
+      @if (!hasDishes()) {
+        <p class="empty-state">Participants haven't added any dishes yet</p>
+      }
+
+      <ul class="participants">
+        @for (person of visibleParticipants(); track person.id) {
+          <li>
+            <app-participant-card
+              [participant]="person"
+              [isOwner]="person.id === ownerSessionId()"
+              [isReadOnly]="isReadOnly()"
+              [showStatus]="false"
+            />
+          </li>
+        }
+      </ul>
+
+      @if (!isSubmitted()) {
+        <section class="consolidated" aria-labelledby="consolidated-title">
+          <h2 id="consolidated-title">Consolidated pre-order</h2>
+          @if (consolidatedOrder().items.length) {
+            <ul class="consolidated-items">
+              @for (item of consolidatedOrder().items; track item.dish.id) {
+                <li>
+                  <span>{{ item.dish.name }} × {{ item.quantity }}</span>
+                  <span>{{ item.dish.price * item.quantity | currency }}</span>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="consolidated-empty">No submitted dishes to send.</p>
+          }
+        </section>
+      }
+
+      <footer class="order-footer">
+        <p class="grand-total">
+          <span>Grand Total</span>
+          <span>{{ consolidatedOrder().total | currency }}</span>
+        </p>
+        @if (groupStatus()?.status === 'Open') {
+          <button
+            class="submit-button"
+            type="button"
+            [disabled]="!canSubmit()"
+            (click)="openSubmitDialog()"
+          >
+            Submit Pre-Order
+          </button>
+        } @else if (isSubmitted()) {
+          <span class="submit-button submit-button--read-only" aria-disabled="true">
+            Submit Pre-Order
+          </span>
+        }
+      </footer>
+    }
   </section>
+
+  @if (isSubmitDialogOpen()) {
+    <app-modal
+      title="Submit Pre-Order"
+      width="520px"
+      [closeOnBackdrop]="!isSubmitting()"
+      (closed)="closeSubmitDialog()"
+    >
+      <p class="confirmation-message">
+        Submit the consolidated pre-order to the restaurant? Only submitted participant carts are
+        included.
+      </p>
+      <div modal-actions class="confirmation-actions">
+        <button
+          class="button button--secondary button--large"
+          type="button"
+          [disabled]="isSubmitting()"
+          (click)="closeSubmitDialog()"
+        >
+          Cancel
+        </button>
+        <button
+          class="button button--primary button--large"
+          type="button"
+          [disabled]="isSubmitting()"
+          (click)="confirmSubmit()"
+        >
+          {{ isSubmitting() ? 'Submitting…' : 'Submit' }}
+        </button>
+      </div>
+    </app-modal>
+  }
 </main>
