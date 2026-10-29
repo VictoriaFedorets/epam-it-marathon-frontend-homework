@@ -31,11 +31,18 @@ export const groupOrdersMockInterceptor: HttpInterceptorFn = (req, next) => {
           return [new HttpResponse({ status: 200, url: req.url, body: handler() })];
         } catch (error) {
           if (error instanceof MockHttpError) {
-            return throwError(() => new HttpErrorResponse({ status: error.status, url: req.url, error: { error: error.message } }));
+            return throwError(
+              () =>
+                new HttpErrorResponse({
+                  status: error.status,
+                  url: req.url,
+                  error: { error: error.message },
+                })
+            );
           }
           throw error;
         }
-      }),
+      })
     );
 
   if (req.method === 'GET' && path.endsWith(`/reservations/${DEMO_RESERVATION_ID}/invite-token`)) {
@@ -44,8 +51,14 @@ export const groupOrdersMockInterceptor: HttpInterceptorFn = (req, next) => {
   if (req.method === 'GET' && path.endsWith(`/guest/invites/${DEMO_INVITE_TOKEN}`)) {
     return respond(() => ({ ...DEMO_INVITE, MaxGuestCount: store.maxCapacity }));
   }
-  if (req.method === 'GET' && path.endsWith(`/reservations/${DEMO_RESERVATION_ID}/guest-session-id`)) {
-    return respond(() => ({ guestSessionId: DEMO_OWNER_SESSION_ID }));
+  if (
+    req.method === 'GET' &&
+    path.endsWith(`/reservations/${DEMO_RESERVATION_ID}/guest-session-id`)
+  ) {
+    return respond(() => ({
+      guestSessionId: DEMO_OWNER_SESSION_ID,
+      guestSessionToken: 'demo-owner-session-token',
+    }));
   }
   if (req.method === 'GET' && path.endsWith(groupBase)) {
     return respond(() => store.snapshot());
@@ -54,7 +67,9 @@ export const groupOrdersMockInterceptor: HttpInterceptorFn = (req, next) => {
     return respond(() => store.groupStatus());
   }
   if (req.method === 'POST' && path.endsWith(`/group-reservations/${DEMO_GROUP_ID}/submit`)) {
-    return respond(() => store.submit((req.body as { reservationId?: string } | null)?.reservationId ?? ''));
+    return respond(() =>
+      store.submit((req.body as { reservationId?: string } | null)?.reservationId ?? '')
+    );
   }
   if (req.method === 'DELETE' && path.includes(`${groupBase}/`)) {
     const guestSessionId = decodeURIComponent(path.slice(path.lastIndexOf('/') + 1));
@@ -62,7 +77,11 @@ export const groupOrdersMockInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   // Демо-логін (?demo): справжній API демо-токен не прийме, тож кошик у шапці показуємо порожнім.
-  if (req.method === 'GET' && path.endsWith('/orders') && isDemoAuthorization(req.headers.get('Authorization'))) {
+  if (
+    req.method === 'GET' &&
+    path.endsWith('/orders') &&
+    isDemoAuthorization(req.headers.get('Authorization'))
+  ) {
     return respond(() => []);
   }
 

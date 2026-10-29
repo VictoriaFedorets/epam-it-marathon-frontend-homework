@@ -20,6 +20,32 @@ app-group-order-page .detail-icon {
   color: color.$green-600;
 }
 
+app-group-order-page .close-button {
+  display: grid;
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  padding: 8px;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: color.$neutral-700;
+  font-size: 0;
+  cursor: default;
+}
+
+app-group-order-page .close-button::before {
+  width: 24px;
+  height: 24px;
+  background-color: currentColor;
+  content: '';
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M18 6L6 18M6 6L18 18' stroke='%23454444' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M18 6L6 18M6 6L18 18' stroke='%23454444' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+
 app-group-order-page .location-icon {
   background-color: currentColor;
   mask: url('/assets/svg/location-green.svg') center / contain no-repeat;
@@ -65,6 +91,70 @@ app-group-order-page .guests-icon {
   background-color: currentColor;
   mask: url('/assets/svg/people-green.svg') center / contain no-repeat;
   -webkit-mask: url('/assets/svg/people-green.svg') center / contain no-repeat;
+}
+
+app-group-order-page .sync-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  color: color.$neutral-600;
+  font-size: 12px;
+}
+
+app-group-order-page .refresh-button {
+  padding: 2px 8px;
+  border: 1px solid color.$green-600;
+  border-radius: 6px;
+  background: transparent;
+  color: color.$green-600;
+  font: inherit;
+  cursor: pointer;
+}
+
+app-group-order-page .refresh-error {
+  margin-top: 6px;
+  color: color.$red-400;
+  font-size: 12px;
+  text-align: right;
+}
+
+app-group-order-page .remove-guest-actions .remove-guest-cancel {
+  min-width: 74px;
+  padding-right: 8px;
+  padding-left: 8px;
+  color: color.$neutral-900;
+  text-decoration-color: color.$neutral-900;
+  text-underline-offset: 7px;
+}
+
+app-group-order-page .remove-guest-actions .remove-guest-confirm {
+  min-width: 166px;
+  border-color: color.$red-400;
+  background: color.$neutral-0;
+  color: color.$red-400;
+}
+
+app-group-order-page .remove-guest-actions .remove-guest-confirm:hover:not(:disabled) {
+  background: color.$red-30;
+}
+
+app-group-order-page .remove-guest-actions .remove-guest-confirm:disabled {
+  border-color: color.$neutral-200;
+  background: color.$neutral-100;
+  color: color.$neutral-400;
+}
+
+@media (max-width: 600px) {
+  app-group-order-page .remove-guest-actions .remove-guest-cancel {
+    flex: 0 0 auto;
+  }
+
+  app-group-order-page .remove-guest-actions .remove-guest-confirm {
+    min-width: 150px;
+    flex: 0 1 auto;
+  }
 }
 
 * {

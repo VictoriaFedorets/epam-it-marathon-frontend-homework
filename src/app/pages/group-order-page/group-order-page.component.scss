@@ -66,32 +66,6 @@
   color: color.$neutral-900;
 }
 
-.close-button {
-  display: grid;
-  box-sizing: border-box;
-  width: 40px;
-  height: 40px;
-  flex: 0 0 40px;
-  padding: 8px;
-  place-items: center;
-  border: 0;
-  background: transparent;
-  color: color.$neutral-700;
-  font-size: 0;
-  cursor: default;
-}
-
-.close-button::before {
-  width: 24px;
-  height: 24px;
-  background-color: currentColor;
-  content: '';
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M18 6L6 18M6 6L18 18' stroke='%23454444' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
-    center / contain no-repeat;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M18 6L6 18M6 6L18 18' stroke='%23454444' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
-    center / contain no-repeat;
-}
-
 .order-details {
   display: flex;
   flex-wrap: wrap;

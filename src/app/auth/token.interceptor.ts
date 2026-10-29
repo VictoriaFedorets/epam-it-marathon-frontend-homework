@@ -17,13 +17,29 @@ export const tokenInterceptor: HttpInterceptorFn = (
 ) => {
   const toastr = inject(ToastService);
 
-  // IMPORTANT: do not modify Guest endpoints at all.
-  // Guest flow uses a different token (guest session token) and we must not touch the body.
-  // Otherwise we break POST /guest/sessions payload.
+  // Owner-only group snapshot and removal endpoints use the Cognito token.
+  // Guest-session cart endpoints use their own token and must remain untouched.
   if (req.url.includes('/guest/')) {
-    return next(req).pipe(
+    const isOwnerGroupSessionRequest =
+      /\/guest\/groups\/[^/]+\/sessions(?:\/[^/]+)?$/.test(new URL(req.url).pathname) &&
+      (req.method === 'GET' || req.method === 'DELETE');
+    const tokens = isOwnerGroupSessionRequest ? inject(AuthenticationService).getTokens() : null;
+    const guestRequest =
+      tokens?.idToken && isOwnerGroupSessionRequest
+        ? req.clone({
+            setHeaders: {
+              Authorization: `Bearer ${tokens.idToken}`,
+            },
+          })
+        : req;
+
+    return next(guestRequest).pipe(
       catchError((error: HttpErrorResponse) => {
         console.log(error);
+
+        if (guestRequest.context.get(SKIP_ERROR_TOAST)) {
+          return throwError(() => error);
+        }
 
         let errorMessage = 'An unexpected error occurred.';
         if (error.error && typeof error.error === 'string') {
@@ -34,7 +50,6 @@ export const tokenInterceptor: HttpInterceptorFn = (
           errorMessage = error.error.message;
         }
 
-        // For guest endpoints, you may still show toast if you want:
         switch (error.status) {
           case 400:
             toastr.error(errorMessage || 'Bad request.', 'Error');
@@ -73,10 +88,10 @@ export const tokenInterceptor: HttpInterceptorFn = (
   const clonedRequest =
     tokens && tokens.idToken
       ? req.clone({
-        setHeaders: {
-          Authorization: 'Bearer ' + tokens.idToken,
-        },
-      })
+          setHeaders: {
+            Authorization: 'Bearer ' + tokens.idToken,
+          },
+        })
       : req;
 
   return next(clonedRequest).pipe(

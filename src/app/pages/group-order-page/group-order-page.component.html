@@ -50,6 +50,20 @@
         </button>
       </section>
     } @else {
+      <div class="sync-controls" aria-live="polite">
+        @if (lastUpdatedAt(); as updatedAt) {
+          <span>Updated at {{ updatedAt | date: 'HH:mm:ss' }}</span>
+        }
+        @if (groupStatus()?.status === 'Open') {
+          <button type="button" class="refresh-button" (click)="refreshNow()">Refresh</button>
+        }
+      </div>
+      @if (refreshFailed() && lastUpdatedAt(); as updatedAt) {
+        <p class="refresh-error" role="status">
+          Couldn't refresh. Showing data from {{ updatedAt | date: 'HH:mm:ss' }}.
+        </p>
+      }
+
       @if (hasPendingParticipants() && !isSubmitted()) {
         <aside class="notice notice--warning">
           <span class="notice-icon" aria-hidden="true">!</span>
@@ -72,7 +86,8 @@
               [participant]="person"
               [isOwner]="person.id === ownerSessionId()"
               [isReadOnly]="isReadOnly()"
-              [showStatus]="false"
+              [canRemove]="person.type === 'Guest' && !isReadOnly()"
+              (removeClick)="openRemoveDialog($event)"
             />
           </li>
         }
@@ -146,6 +161,38 @@
           (click)="confirmSubmit()"
         >
           {{ isSubmitting() ? 'Submitting…' : 'Submit' }}
+        </button>
+      </div>
+    </app-modal>
+  }
+
+  @if (selectedGuest(); as guest) {
+    <app-modal
+      title="Remove Guest"
+      width="520px"
+      [closeOnBackdrop]="!isRemovingGuest()"
+      (closed)="closeRemoveDialog()"
+    >
+      <p class="confirmation-message">
+        Are you sure you want to remove {{ guest.name }} and their pre-order from this reservation?
+        This action cannot be undone.
+      </p>
+      <div modal-actions class="confirmation-actions remove-guest-actions">
+        <button
+          class="button button--tertiary button--large remove-guest-cancel"
+          type="button"
+          [disabled]="isRemovingGuest()"
+          (click)="closeRemoveDialog()"
+        >
+          Cancel
+        </button>
+        <button
+          class="button button--large remove-guest-confirm"
+          type="button"
+          [disabled]="isRemovingGuest()"
+          (click)="confirmRemoveGuest()"
+        >
+          {{ isRemovingGuest() ? 'Removing…' : 'Remove Guest' }}
         </button>
       </div>
     </app-modal>

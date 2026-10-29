@@ -51,6 +51,15 @@
   border-bottom-color: color.$neutral-200;
 }
 
+.header-action--remove {
+  cursor: pointer;
+}
+
+.header-action--remove:focus-visible {
+  outline: 2px solid color.$green-600;
+  outline-offset: 3px;
+}
+
 .items {
   list-style: none;
 }

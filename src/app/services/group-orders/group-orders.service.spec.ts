@@ -48,8 +48,12 @@ describe('Рівень 2 · GroupOrdersService', () => {
     service.getOwnerSessionId$('res-1').subscribe((value) => (sessionId = value));
     const request = http.expectOne(`${BASE_URL}/reservations/res-1/guest-session-id`);
     expect(request.request.method).toBe('GET');
-    request.flush({ guestSessionId: 'owner-1' });
+    request.flush({ guestSessionId: 'owner-1', guestSessionToken: 'owner-token' });
     expect(sessionId).toBe('owner-1');
+    expect(service.ownerSessionCredentials()).toEqual({
+      guestSessionId: 'owner-1',
+      guestSessionToken: 'owner-token',
+    });
   });
 
   it('getStatus$: GET /guest/groups/{id}/status', () => {
@@ -57,6 +61,13 @@ describe('Рівень 2 · GroupOrdersService', () => {
     const request = http.expectOne(`${BASE_URL}/guest/groups/grp-1/status`);
     expect(request.request.method).toBe('GET');
     request.flush({ currentParticipants: 3, maxCapacity: 5, status: 'Open' });
+  });
+
+  it('removeSession$: DELETE /guest/groups/{id}/sessions/{guestSessionId}', () => {
+    service.removeSession$('grp-1', 'guest-1').subscribe();
+    const request = http.expectOne(`${BASE_URL}/guest/groups/grp-1/sessions/guest-1`);
+    expect(request.request.method).toBe('DELETE');
+    request.flush({ participants: [], total: 0 });
   });
 
   it('submit$: POST /group-reservations/{id}/submit з тілом { reservationId }', () => {

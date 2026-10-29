@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { Participant } from '@app/models/group-orders/participant.model';
 
 @Component({
@@ -14,6 +14,8 @@ export class ParticipantCardComponent {
   readonly isOwner = input(false);
   readonly isReadOnly = input(false);
   readonly showStatus = input(true);
+  readonly canRemove = input(false);
+  readonly removeClick = output<Participant>();
 
   readonly title = computed(() => {
     const person = this.participant();

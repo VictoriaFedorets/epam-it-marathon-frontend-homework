@@ -8,13 +8,18 @@
         {{ title() }}
       }
     </h2>
-    @if (isOwner() || participant().type === 'Guest') {
+    @if (isOwner()) {
       <button class="header-action" type="button" [disabled]="isReadOnly()" aria-disabled="true">
-        @if (isOwner()) {
-          Edit my Pre-Order
-        } @else {
-          Remove Guest
-        }
+        Edit my Pre-Order
+      </button>
+    } @else if (canRemove()) {
+      <button
+        class="header-action header-action--remove"
+        type="button"
+        [attr.aria-label]="'Remove ' + participant().name"
+        (click)="removeClick.emit(participant())"
+      >
+        Remove Guest
       </button>
     }
   </header>
