@@ -143,7 +143,7 @@
   border-radius: 6px;
   font-size: 14px;
   appearance: none;
-  background: color.$neutral-0 url('/assets/svg/arrow-down.svg') no-repeat right 4px center / 24px 24px;
+  background: color.$neutral-0 url('/epam-it-marathon-frontend-homework/assets/svg/arrow-down.svg') no-repeat right 4px center / 24px 24px;
   padding: 10px calc(4px + 24px + 4rem) 10px 17px; // 4px edge + 24px arrow + 4rem gap to the text
   @media (max-width: 560px) {
     width: 70%;
@@ -164,7 +164,7 @@
     }
 
     &:open {
-      background-image: url('/assets/svg/arrow-up.svg');
+      background-image: url('/epam-it-marathon-frontend-homework/assets/svg/arrow-up.svg');
     }
 
     &::picker(select) {
