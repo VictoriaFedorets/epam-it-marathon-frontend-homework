@@ -60,7 +60,7 @@ export class FeedbackWindowComponent implements OnInit, AfterViewInit {
   isAnonymous = false;
 
   waiterName = 'Mario Jast';
-  waiterProfileImage = '/assets/img/avatar.png';
+  waiterProfileImage = 'assets/img/avatar.png';
 
   feedbacksService = inject(FeedbacksService);
   toastr = inject(ToastService);
@@ -138,7 +138,7 @@ export class FeedbackWindowComponent implements OnInit, AfterViewInit {
       });
       this.userService.getUserProfileImage(this.selectedReservation.waiterId).subscribe({
         next: (response) => {
-          this.waiterProfileImage = response.presignedUrl ?? '/assets/img/avatar.png'; // Fallback to default image if not available
+          this.waiterProfileImage = response.presignedUrl ?? 'assets/img/avatar.png'; // Fallback to default image if not available
         },
         error: (err) => {
           console.error('Error fetching waiter profile image:', err);

@@ -1,6 +1,6 @@
 .image-container {
   position: relative;
-  background: url('/assets/img/tables-page-image.jpg') center center no-repeat;
+  background: url('assets/img/tables-page-image.jpg') center center no-repeat;
   background-size: cover;
   min-height: 200px;
   display: flex;

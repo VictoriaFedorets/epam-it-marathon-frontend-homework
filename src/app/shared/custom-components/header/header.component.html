@@ -4,7 +4,7 @@
   </a>
   @if (!isSubmittedGuestPreorder) {
   <button class="mobile-menu-icon" (click)="toggleMobileMenu()">
-    <img src="../../../../assets/svg/menu.svg" alt="menu icon" />
+    <img src="assets/svg/menu.svg" alt="menu icon" />
   </button>
   <nav class="nav" [class.mobile-open]="isMobileMenuOpen()" role="presentation" (click)="closeMobileMenu()">
     @if (user()) {
@@ -40,7 +40,7 @@
     <div class="mobile-actions">
       @if (!showCart()) {
         <button class="mobile-close-btn">
-          <img src="../../../../assets/svg/close.svg" alt="close icon" />
+          <img src="assets/svg/close.svg" alt="close icon" />
         </button>
       }
 
@@ -86,7 +86,7 @@
             <div class="dropdown-header">
               <span>Notifications</span>
               <button class="icon-button icon-button--small" (click)="closeNotificationsDropdown()">
-                <img src="../../../../assets/svg/close.svg" alt="close icon" />
+                <img src="assets/svg/close.svg" alt="close icon" />
               </button>
             </div>
             @if (notifications().length === 0) {
@@ -173,7 +173,7 @@
           <div class="dropdown-header">
             <span>Notifications</span>
             <button class="icon-button icon-button--small" (click)="closeNotificationsDropdown()">
-              <img src="../../../../assets/svg/close.svg" alt="close icon" />
+              <img src="assets/svg/close.svg" alt="close icon" />
             </button>
           </div>
           @if (notifications().length === 0) {
@@ -265,7 +265,7 @@
                 (keydown.space)="closeNotificationsDropdown()"
                 (keydown.enter)="closeNotificationsDropdown()"
         >
-          <img src="../../../../assets/svg/close.svg" alt="close icon" />
+          <img src="assets/svg/close.svg" alt="close icon" />
         </button>
       </div>
 
