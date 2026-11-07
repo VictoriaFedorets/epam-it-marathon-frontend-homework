@@ -9,7 +9,7 @@
 }
 
 .image-wrapper {
-  background-image: url('assets/img/table-card-image.jpg');
+  background-image: url('/assets/img/table-card-image.jpg');
   background-size: cover;
   background-position: center;
   border-top-left-radius: 20px;

@@ -94,7 +94,7 @@
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  min-height: 2rem; // same height as one address line, so it centres on the first line
+  min-height: 2rem;
   flex-shrink: 0;
   white-space: nowrap;
 
@@ -143,15 +143,13 @@
   border-radius: 6px;
   font-size: 14px;
   appearance: none;
-  background: color.$neutral-0 url('/epam-it-marathon-frontend-homework/assets/svg/arrow-down.svg') no-repeat right 4px center / 24px 24px;
-  padding: 10px calc(4px + 24px + 4rem) 10px 17px; // 4px edge + 24px arrow + 4rem gap to the text
+  background: color.$neutral-0 url('/assets/svg/arrow-down.svg') no-repeat right 4px center / 24px 24px;
+  padding: 10px calc(4px + 24px + 4rem) 10px 17px;
   @media (max-width: 560px) {
     width: 70%;
   }
 }
 
-// Native <option> lists ignore padding in most browsers. `base-select` (Chromium 135+) makes the
-// popup stylable; elsewhere the select keeps its native list.
 @supports (appearance: base-select) {
   .reviews-section__options-sorting select,
   .reviews-section__options-sorting select::picker(select) {
@@ -230,8 +228,6 @@
   overflow-x: auto;
   justify-content: center;
   gap: 32px;
-  // 16px of room so the card shadow (10px blur + 4px spread) is not clipped by overflow;
-  // the negative margin cancels it out, leaving a 24px gap to the pagination
   padding: 16px;
   margin: -16px -16px 8px;
   scroll-snap-type: x mandatory;
@@ -262,7 +258,6 @@
 }
 
 .review-text {
-  // margin (not padding) so lines beyond the clamp cannot peek through the bottom spacing
   margin: 0 24px 24px;
   font-size: 14px;
   line-height: 24px;

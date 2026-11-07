@@ -49,7 +49,9 @@ export class ReservationInviteModalComponent implements OnInit {
 
   readonly inviteLink = computed(() => {
     const token = this.inviteToken();
-    return token ? `${window.location.origin}/join/${token}` : null;
+    return token
+      ? new URL(`#/join/${encodeURIComponent(token)}`, document.baseURI).toString()
+      : null;
   });
 
   readonly invitePlaceholder = computed(() => {
